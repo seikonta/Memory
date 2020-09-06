@@ -5,9 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -15,21 +13,21 @@ class MainActivity : AppCompatActivity() {
 
     private val readRequestCode: Int = 42
 
+
+
+    private var title: String = ""
+    var content: String = ""
+    var a: Int =0
     val realm: Realm = Realm.getDefaultInstance()
 
-    val  imageData: List<ImageData> = listOf(
-        ImageData(R.drawable.image0),
-        ImageData(R.drawable.image1),
-        ImageData(R.drawable.image2),
-        ImageData(R.drawable.image3),
-        ImageData(R.drawable.image4),
-        ImageData(R.drawable.image5)
+    val memo: Memo? = read()
+
+    val  imageData: List<String?> = listOf(
+        memo?.imageUriString
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val preview = Intent(this, PreviewActivity::class.java)
-
-        val memo: Memo? = read()
 
         if (memo != null) {
             // RecyclerViewの画像をmemo.imageUriStringにする
@@ -55,13 +53,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         adapter.setOnItemClickListener(object : RecyclerViewAdapter.OnItemClickListener {
-            override fun onItemClickListener(view: View, position: Int, clickedText: ImageData) {
-                if (clickedText == ImageData(R.drawable.image0)) {
-                    preview.putExtra("image", R.drawable.image0)
-                    preview.putExtra("title", "桜木町周辺")
-                    preview.putExtra("main", mainText)
-                    startActivity(preview)
-                }
+            override fun onItemClickListener(view: View, position: Int, clickedText: String?) {
+                preview.putExtra("image", memo?.imageUriString.toString())
+                preview.putExtra("title", "桜木町周辺")
+                preview.putExtra("main", mainText)
+                startActivity(preview)
             }
         })
     }
@@ -76,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         return realm.where(Memo::class.java).findFirst()
     }
 
-    fun save(tag: Int, imageUriString: String, title: String, content: String) {
+    fun save(tag: Int, imageUriString: String?, title: String, content: String) {
         val memo: Memo? = read()
 
         realm.executeTransaction {
@@ -89,7 +85,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun equal(memo: Memo, tag: Int, imageUriString: String, title: String, content: String) {
+    fun equal(memo: Memo, tag: Int, imageUriString: String?, title: String, content: String) {
         memo.tag = tag
         memo.imageUriString = imageUriString
         memo.title = title
@@ -103,15 +99,15 @@ class MainActivity : AppCompatActivity() {
             data?.data.also { uri ->
                 val memo: Memo? = read()
                 var tag: Int
-                if (memo?.tag != null) {
-                    tag = memo.tag!! + 1
+                tag = if (memo?.tag != null) {
+                    memo.tag!! + 1
+                } else {
+                    0
                 }
-                else {
-                    tag = 0
-                }
-                var title: String = ""
+                var imageUri: String = uri.toString()
+
                 var content: String = ""
-                save(tag, uri.toString(), title, content)
+                save(tag, imageUri, title, content)
             }
         }
     }

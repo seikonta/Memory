@@ -1,12 +1,13 @@
 package app.takasu.kon.memory
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 
-class RecyclerViewAdapter(private val customList: List<ImageData>) : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
+class RecyclerViewAdapter(private val customList: List<String?>) : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
 
     //val items: MutableList<ImageData> = mutableListOf()
     lateinit var listener: OnItemClickListener
@@ -27,14 +28,15 @@ class RecyclerViewAdapter(private val customList: List<ImageData>) : RecyclerVie
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
        // val item = items[position]
-        holder.drawImage.setImageResource(customList[position].albumImage)
+        var imageID = Uri.parse(customList[position]?.albumImage.toString())
+        holder.drawImage.setImageURI(imageID)
         holder.view.setOnClickListener {
             listener.onItemClickListener(it, position, customList[position])
         }
     }
 
     interface OnItemClickListener {
-        fun onItemClickListener(view: View, position: Int, clickedText: ImageData)
+        fun onItemClickListener(view: View, position: Int, clickedText: String?)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
