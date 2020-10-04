@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 
-class RecyclerViewAdapter(private val customList: List<String?>) : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
+class RecyclerViewAdapter(private val customList: List<ImageData?>) : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
 
     //val items: MutableList<ImageData> = mutableListOf()
     lateinit var listener: OnItemClickListener
@@ -27,11 +27,15 @@ class RecyclerViewAdapter(private val customList: List<String?>) : RecyclerView.
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-       // val item = items[position]
-        var imageID = Uri.parse(customList[position]?.albumImage.toString())
-        holder.drawImage.setImageURI(imageID)
-        holder.view.setOnClickListener {
-            listener.onItemClickListener(it, position, customList[position])
+        //val item = items[position]
+        if (customList[position]?.albumImage != null) {
+            if (Uri.parse(customList[position]?.albumImage) != null) {
+                var imageID = Uri.parse(customList[position]?.albumImage)
+                holder.drawImage.setImageURI(imageID)
+                holder.view.setOnClickListener {
+                    listener.onItemClickListener(it, position, customList[position].toString())
+                }
+            }
         }
     }
 

@@ -2,12 +2,15 @@ package app.takasu.kon.memory
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_preview.*
+import kotlinx.android.synthetic.main.activity_preview.view.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,14 +19,12 @@ class MainActivity : AppCompatActivity() {
 
 
     private var title: String = ""
-    var content: String = ""
-    var a: Int =0
     val realm: Realm = Realm.getDefaultInstance()
 
     val memo: Memo? = read()
 
-    val  imageData: List<String?> = listOf(
-        memo?.imageUriString
+    val  imageData: List<ImageData> = listOf(
+        ImageData(memo?.imageUriString)
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +34,8 @@ class MainActivity : AppCompatActivity() {
             // RecyclerViewの画像をmemo.imageUriStringにする
         }
 
-        var mainText = intent.getStringExtra("main")
+        //var titleText = intent.getStringExtra("title")
+        //var mainText = intent.getStringExtra("main")
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -54,9 +56,10 @@ class MainActivity : AppCompatActivity() {
 
         adapter.setOnItemClickListener(object : RecyclerViewAdapter.OnItemClickListener {
             override fun onItemClickListener(view: View, position: Int, clickedText: String?) {
+                preview.putExtra("tag", memo?.tag)
                 preview.putExtra("image", memo?.imageUriString.toString())
-                preview.putExtra("title", "桜木町周辺")
-                preview.putExtra("main", mainText)
+                preview.putExtra("title", memo?.title)
+                preview.putExtra("main", memo?.content)
                 startActivity(preview)
             }
         })
@@ -78,9 +81,11 @@ class MainActivity : AppCompatActivity() {
         realm.executeTransaction {
             if (memo != null) {
                 equal(memo, tag, imageUriString, title, content)
+                realm.copyToRealm(memo)
             } else {
                 val newMemo: Memo = it.createObject(Memo::class.java)
                 equal(newMemo, tag, imageUriString, title, content)
+                realm.copyToRealm(newMemo)
             }
         }
     }

@@ -8,15 +8,16 @@
 
     <Button
         android:id="@+id/galleryButton"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/save_button_frame"
+        android:backgroundTint="@color/colorAccent"
         android:gravity="center"
         android:text="＋"
-        android:textColor="#55830B"
-        android:textSize="50dp"
+        android:textColor="#FFFFFF"
+        android:textSize="40dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageRecycler"
         app:layout_constraintEnd_toEndOf="@+id/imageRecycler" />
 
