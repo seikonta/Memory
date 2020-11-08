@@ -16,16 +16,16 @@ class MainActivity : AppCompatActivity() {
 
     private val readRequestCode: Int = 42
 
-
-
     private var title: String = ""
     val realm: Realm = Realm.getDefaultInstance()
 
     val memo: Memo? = read()
 
-    val  imageData: List<ImageData> = listOf(
+    val  imageData: MutableList<ImageData> = mutableListOf(
         ImageData(memo?.imageUriString)
     )
+
+    val adapter = RecyclerViewAdapter(imageData)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val preview = Intent(this, PreviewActivity::class.java)
@@ -39,9 +39,9 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        val adapter = RecyclerViewAdapter(imageData)
         val layoutManager = LinearLayoutManager(this)
+
+        //val recyclerAdapter = Intent(this, RecyclerViewAdapter::class.java).apply {}
 
         imageRecycler.layoutManager = layoutManager
         imageRecycler.adapter = adapter
@@ -52,6 +52,7 @@ class MainActivity : AppCompatActivity() {
             galleryIntent.addCategory(Intent.CATEGORY_OPENABLE)
             galleryIntent.type = "image/*"
             startActivityForResult(galleryIntent, readRequestCode)
+            //startActivity(recyclerAdapter)
         }
 
         adapter.setOnItemClickListener(object : RecyclerViewAdapter.OnItemClickListener {
@@ -112,6 +113,9 @@ class MainActivity : AppCompatActivity() {
                 var imageUri: String = uri.toString()
 
                 var content: String = ""
+
+                imageData.add(ImageData(imageUri))
+                imageRecycler.adapter = adapter
                 save(tag, imageUri, title, content)
             }
         }

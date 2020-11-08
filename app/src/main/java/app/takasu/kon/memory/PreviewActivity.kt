@@ -59,15 +59,15 @@ class PreviewActivity : AppCompatActivity() {
         val memo: Memo? = read()
 
         realm.executeTransaction {
-            //if (memo != null) {
-            //    equal(memo, tag, imageUriString, title, content)
-            //} else {
-                var newMemo: Memo = it.createObject(Memo::class.java)
+            if (memo != null) {
+                equal(memo, tag, imageUriString, title, content)
+                realm.copyToRealm(memo)
+            } else {
+                val newMemo: Memo = it.createObject(Memo::class.java)
                 equal(newMemo, tag, imageUriString, title, content)
-            realm.copyToRealm(newMemo)
-            //}
+                realm.copyToRealm(newMemo)
+            }
         }
-
         Toast.makeText(applicationContext, "保存しました", Toast.LENGTH_SHORT).show()
     }
 
