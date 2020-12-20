@@ -17,7 +17,7 @@ class PreviewActivity : AppCompatActivity() {
 
         val main = Intent(this, MainActivity::class.java)
 
-        var tagInt = intent.getIntExtra("tag", 0)
+        var tagString = intent.getStringExtra("tag")
         var imageId = intent.getStringExtra("image")
         var titleText = intent.getStringExtra("title")
         var mainText = intent.getStringExtra("main")
@@ -46,7 +46,7 @@ class PreviewActivity : AppCompatActivity() {
         }
 
         saveButton.setOnClickListener {
-            save(tagInt, imageId, titleEditText.text.toString(), mainEditText.text.toString())
+            save(tagString, imageId, titleEditText.text.toString(), mainEditText.text.toString())
         }
 
     }
@@ -55,7 +55,7 @@ class PreviewActivity : AppCompatActivity() {
         return realm.where(Memo::class.java).findFirst()
     }
 
-    fun save(tag: Int, imageUriString: String?, title: String, content: String) {
+    fun save(tag: String, imageUriString: String?, title: String, content: String) {
         val memo: Memo? = read()
 
         realm.executeTransaction {
@@ -71,8 +71,8 @@ class PreviewActivity : AppCompatActivity() {
         Toast.makeText(applicationContext, "保存しました", Toast.LENGTH_SHORT).show()
     }
 
-    fun equal(memo: Memo, tag: Int, imageUriString: String?, title: String, content: String) {
-        memo.tag = tag
+    fun equal(memo: Memo, tag: String, imageUriString: String?, title: String, content: String) {
+        memo.id = tag
         memo.imageUriString = imageUriString
         memo.title = title
         memo.content = content

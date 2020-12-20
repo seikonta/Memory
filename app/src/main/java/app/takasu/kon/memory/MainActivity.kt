@@ -6,39 +6,47 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.realm.Realm
+import io.realm.RealmResults
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_preview.*
 import kotlinx.android.synthetic.main.activity_preview.view.*
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     private val readRequestCode: Int = 42
 
     private var title: String = ""
-    val realm: Realm = Realm.getDefaultInstance()
+    val realm: Realm by lazy {
+        Realm.getDefaultInstance()
+    }
 
-    val memo: Memo? = read()
+    val memo: RealmResults<Memo> = readAll()
 
-    val  imageData: MutableList<ImageData> = mutableListOf(
-        ImageData(memo?.imageUriString)
-    )
-
-    val adapter = RecyclerViewAdapter(imageData)
+    val adapter = RecyclerViewAdapter(memo, object : RecyclerViewAdapter.OnItemClickListener {
+        override fun onItemClick(item: Memo) {
+            val preview = Intent(this@MainActivity, PreviewActivity::class.java)
+            preview.putExtra("tag", item.id)
+            startActivity(preview)
+        }
+    }, true)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val preview = Intent(this, PreviewActivity::class.java)
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
-        if (memo != null) {
-            // RecyclerViewの画像をmemo.imageUriStringにする
-        }
+
+//        if (memo != null) {
+//            // RecyclerViewの画像をmemo.imageUriStringにする
+//        }
 
         //var titleText = intent.getStringExtra("title")
         //var mainText = intent.getStringExtra("main")
 
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
         val layoutManager = LinearLayoutManager(this)
 
         //val recyclerAdapter = Intent(this, RecyclerViewAdapter::class.java).apply {}
@@ -48,6 +56,7 @@ class MainActivity : AppCompatActivity() {
         imageRecycler.setHasFixedSize(true)
 
         galleryButton.setOnClickListener {
+            println("clicked galleryButton")
             val galleryIntent = Intent(Intent.ACTION_OPEN_DOCUMENT)
             galleryIntent.addCategory(Intent.CATEGORY_OPENABLE)
             galleryIntent.type = "image/*"
@@ -55,15 +64,15 @@ class MainActivity : AppCompatActivity() {
             //startActivity(recyclerAdapter)
         }
 
-        adapter.setOnItemClickListener(object : RecyclerViewAdapter.OnItemClickListener {
-            override fun onItemClickListener(view: View, position: Int, clickedText: String?) {
-                preview.putExtra("tag", memo?.tag)
-                preview.putExtra("image", memo?.imageUriString.toString())
-                preview.putExtra("title", memo?.title)
-                preview.putExtra("main", memo?.content)
-                startActivity(preview)
+        /*darkThemeSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             }
-        })
+            else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }*/
+
     }
 
     override fun onDestroy() {
@@ -72,14 +81,14 @@ class MainActivity : AppCompatActivity() {
         realm.close()
     }
 
-    fun read() : Memo? {
-        return realm.where(Memo::class.java).findFirst()
+    fun readAll() : RealmResults<Memo> {
+        return realm.where(Memo::class.java).findAll()
     }
 
-    fun save(tag: Int, imageUriString: String?, title: String, content: String) {
-        val memo: Memo? = read()
-
+    fun save(tag: String, imageUriString: String?, title: String, content: String) {
         realm.executeTransaction {
+            val memo: Memo = it.createObject(Memo::class.java, UUID.randomUUID())
+
             if (memo != null) {
                 equal(memo, tag, imageUriString, title, content)
                 realm.copyToRealm(memo)
@@ -91,8 +100,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun equal(memo: Memo, tag: Int, imageUriString: String?, title: String, content: String) {
-        memo.tag = tag
+    fun equal(memo: Memo, id: String, imageUriString: String?, title: String, content: String) {
+        memo.id = id
         memo.imageUriString = imageUriString
         memo.title = title
         memo.content = content
@@ -103,19 +112,18 @@ class MainActivity : AppCompatActivity() {
 
         if (requestCode == readRequestCode && resultCode == Activity.RESULT_OK) {
             data?.data.also { uri ->
-                val memo: Memo? = read()
-                var tag: Int
-                tag = if (memo?.tag != null) {
+                var tag: String = UUID.randomUUID().toString()
+                /*tag = if (memo?.tag != null) {
                     memo.tag!! + 1
                 } else {
                     0
-                }
+                }*/
                 var imageUri: String = uri.toString()
+
+                var title: String = ""
 
                 var content: String = ""
 
-                imageData.add(ImageData(imageUri))
-                imageRecycler.adapter = adapter
                 save(tag, imageUri, title, content)
             }
         }

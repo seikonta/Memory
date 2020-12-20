@@ -4,22 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/galleryButton"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+    <com.andexert.library.RippleView
+        android:id="@+id/more"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/save_button_frame"
-        android:backgroundTint="@color/colorAccent"
-        android:gravity="center"
-        android:text="＋"
-        android:textColor="#FFFFFF"
-        android:textSize="40dp"
+        android:layout_margin="5dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageRecycler"
-        app:layout_constraintEnd_toEndOf="@+id/imageRecycler" />
+        app:layout_constraintEnd_toEndOf="@+id/imageRecycler"
+        rv_centered="true">
+
+        <Button
+            android:id="@+id/galleryButton"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/save_button_frame"
+            android:backgroundTint="@color/colorAccent"
+            android:gravity="center"
+            android:text="＋"
+            android:textColor="#FFFFFF"
+            android:textSize="40dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageRecycler"
+            app:layout_constraintEnd_toEndOf="@+id/imageRecycler" />
+
+    </com.andexert.library.RippleView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/imageRecycler"
@@ -36,4 +50,5 @@
         app:layout_constraintVertical_bias="1.0">
 
     </androidx.recyclerview.widget.RecyclerView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
