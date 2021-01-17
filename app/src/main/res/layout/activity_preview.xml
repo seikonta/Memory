@@ -1,95 +1,185 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true">
+    android:background="@color/background">
 
-    <ImageView
-        android:id="@+id/previewImage"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/image0" />
-
-    <EditText
-        android:id="@+id/titleEditText"
-        android:layout_width="0dp"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:ems="10"
-        android:fontFamily="sans-serif-black"
-        android:hint="タイトル"
-        android:inputType="textPersonName"
-        android:textColor="@color/textColor"
-        android:textColorHint="@color/hintColor"
-        android:textSize="36sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:clickable="true"
+        app:backgroundTint="@color/colorAccent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/previewImage" />
-
-    <EditText
-        android:id="@+id/mainEditText"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:ems="10"
-        android:fontFamily="sans-serif"
-        android:gravity="start|top"
-        android:hint="本文を入力"
-        android:inputType="textLongMessage|textMultiLine|text"
-        android:textColor="@color/textColor"
-        android:textColorHint="@color/hintColor"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleEditText" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/abc_vector_test" />
 
     <LinearLayout
-        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/backButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/colorAccent"
-            android:fontFamily="sans-serif"
-            android:text="戻る"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp" />
-
-        <Button
-            android:id="@+id/saveButton"
-            android:layout_width="wrap_content"
+        <ImageView
+            android:id="@+id/previewImage"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="@color/colorPrimary"
-            android:fontFamily="sans-serif"
-            android:text="保存"
-            android:textColor="#ffffff"
-            android:textSize="16sp" />
+            android:adjustViewBounds="true"
+            android:background="@color/background"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/titleEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:ems="10"
+                    android:hint="タイトル"
+                    android:inputType="textPersonName"
+                    android:textColor="@color/textColor"
+                    android:textColorHint="@color/hintColor"
+                    android:textSize="36sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/dateText"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/dateText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="2020/12/22"
+                    android:textColor="@color/textColor"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <EditText
+                android:id="@+id/mainEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:gravity="top"
+                android:hint="本文を入力"
+                android:inputType="textLongMessage|textMultiLine"
+                android:textColor="@color/textColor"
+                android:textColorHint="@color/hintColor"
+                android:textSize="24sp" />
+        </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:background="@color/background"-->
+<!--    android:descendantFocusability="beforeDescendants"-->
+<!--    android:focusableInTouchMode="true">-->
+
+<!--    <ImageView-->
+<!--        android:id="@+id/previewImage"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:adjustViewBounds="true"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:srcCompat="@drawable/image0" />-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/titleEditText"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:layout_marginEnd="16dp"-->
+<!--        android:ems="10"-->
+<!--        android:fontFamily="sans-serif-black"-->
+<!--        android:hint="タイトル"-->
+<!--        android:inputType="textPersonName"-->
+<!--        android:textColor="@color/textColor"-->
+<!--        android:textColorHint="@color/hintColor"-->
+<!--        android:textSize="36sp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/previewImage" />-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/mainEditText"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:layout_marginEnd="16dp"-->
+<!--        android:layout_marginBottom="16dp"-->
+<!--        android:ems="10"-->
+<!--        android:fontFamily="sans-serif"-->
+<!--        android:gravity="start|top"-->
+<!--        android:hint="本文を入力"-->
+<!--        android:inputType="textLongMessage|textMultiLine|text"-->
+<!--        android:textColor="@color/textColor"-->
+<!--        android:textColorHint="@color/hintColor"-->
+<!--        android:textSize="24sp"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/linearLayout"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/titleEditText" />-->
+
+<!--    <LinearLayout-->
+<!--        android:id="@+id/linearLayout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginEnd="16dp"-->
+<!--        android:layout_marginBottom="16dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent">-->
+
+<!--        <Button-->
+<!--            android:id="@+id/backButton"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginEnd="16dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:backgroundTint="@color/colorAccent"-->
+<!--            android:fontFamily="sans-serif"-->
+<!--            android:text="戻る"-->
+<!--            android:textColor="#FFFFFF"-->
+<!--            android:textSize="16sp" />-->
+
+<!--        <Button-->
+<!--            android:id="@+id/saveButton"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:backgroundTint="@color/colorPrimary"-->
+<!--            android:fontFamily="sans-serif"-->
+<!--            android:text="保存"-->
+<!--            android:textColor="#ffffff"-->
+<!--            android:textSize="16sp" />-->
+<!--    </LinearLayout>-->
+
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->

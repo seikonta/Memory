@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import io.realm.Realm
+import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.activity_preview.*
 
 class PreviewActivity : AppCompatActivity() {
@@ -18,62 +19,77 @@ class PreviewActivity : AppCompatActivity() {
         val main = Intent(this, MainActivity::class.java)
 
         var tagString = intent.getStringExtra("tag")
-        var imageId = intent.getStringExtra("image")
-        var titleText = intent.getStringExtra("title")
-        var mainText = intent.getStringExtra("main")
+//        var imageId = intent.getStringExtra("image")
+//        var titleText = intent.getStringExtra("title")
+//        var mainText = intent.getStringExtra("main")
 
-        previewImage.setImageURI(Uri.parse(imageId))
-        titleEditText.setText(titleText)
-        mainEditText.setText(mainText)
+        var contents = realm.where(Memo::class.java).equalTo("id", tagString).findFirst()!!
+        previewImage.setImageURI(Uri.parse(contents.imageUriString))
+        titleEditText.setText(contents.title)
+        mainEditText.setText(contents.content)
 
         backButton.setOnClickListener {
             //main.putExtra("title", titleText)
             //main.putExtra("main", mainText)
-            val memo: Memo? = read()
-            if (memo?.title != titleEditText.text.toString() || memo?.content != mainEditText.text.toString()) {
-                AlertDialog.Builder(this)
-                    .setTitle("注意")
-                    .setMessage("変更内容が保存されていません。変更を破棄してよろしいですか？")
-                    .setPositiveButton("変更内容を破棄") { _, _ -> finish() }
-                    .setNegativeButton("キャンセル") { _, _ ->
-
-                    }
-                    .show()
-            }
-            else {
-                finish()
-            }
+//            val memo: Memo? = read(tagString)
+//            if (memo?.title != titleEditText.text.toString() || memo?.content != mainEditText.text.toString()) {
+//                AlertDialog.Builder(this)
+//                    .setTitle("注意")
+//                    .setMessage("変更内容が保存されていません。変更を破棄してよろしいですか？")
+//                    .setPositiveButton("変更内容を破棄") { _, _ -> finish() }
+//                    .setNegativeButton("キャンセル") { _, _ ->
+//
+//                    }
+//                    .show()
+//            }
+//            else {
+//                finish()
+//            }
+            finish()
         }
 
-        saveButton.setOnClickListener {
-            save(tagString, imageId, titleEditText.text.toString(), mainEditText.text.toString())
-        }
+//        saveButton.setOnClickListener {
+//            save(tagString,/* imageId, */titleEditText.text.toString(), mainEditText.text.toString())
+//        }
 
     }
 
-    fun read() : Memo? {
-        return realm.where(Memo::class.java).findFirst()
+    override fun onDestroy() {
+        super.onDestroy()
+
+        var tagString = intent.getStringExtra("tag")
+        save(tagString,/* imageId, */titleEditText.text.toString(), mainEditText.text.toString())
     }
 
-    fun save(tag: String, imageUriString: String?, title: String, content: String) {
-        val memo: Memo? = read()
+    fun read(tag: String) : Memo? {
+        return realm.where(Memo::class.java).equalTo("id", tag).findFirst()
+    }
+
+    fun save(tag: String,/* imageUriString: String?, */title: String, content: String) {
+        val memo: Memo? = read(tag)
 
         realm.executeTransaction {
             if (memo != null) {
-                equal(memo, tag, imageUriString, title, content)
+                equal(memo, /*tag, imageUriString, */title, content)
                 realm.copyToRealm(memo)
             } else {
                 val newMemo: Memo = it.createObject(Memo::class.java)
-                equal(newMemo, tag, imageUriString, title, content)
+                equal(newMemo, /*tag, imageUriString, */title, content)
                 realm.copyToRealm(newMemo)
             }
         }
-        Toast.makeText(applicationContext, "保存しました", Toast.LENGTH_SHORT).show()
+
+//        realm.executeTransaction {
+//            val memo: Memo? = read()
+//            equal(memo!!, title, content)
+//        }
+
+        //Toast.makeText(applicationContext, "保存しました", Toast.LENGTH_SHORT).show()
     }
 
-    fun equal(memo: Memo, tag: String, imageUriString: String?, title: String, content: String) {
-        memo.id = tag
-        memo.imageUriString = imageUriString
+    fun equal(memo: Memo, /*tag: String, imageUriString: String?, */title: String, content: String) {
+//        memo.id = tag
+//        memo.imageUriString = imageUriString
         memo.title = title
         memo.content = content
     }

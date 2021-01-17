@@ -64,6 +64,17 @@ class MainActivity : AppCompatActivity() {
             //startActivity(recyclerAdapter)
         }
 
+//        val adapter = RecyclerViewAdapter(this, memo, object : RecyclerViewAdapter.OnItemClickListener {
+//            override fun onItemClick(item: Memo) {
+//                println("clicked galleryButton")
+//                val galleryIntent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+//                galleryIntent.addCategory(Intent.CATEGORY_OPENABLE)
+//                galleryIntent.type = "image/*"
+//                startActivityForResult(galleryIntent, readRequestCode)
+//                //startActivity(recyclerAdapter)
+//            }
+//        }, true)
+
         /*darkThemeSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -85,23 +96,25 @@ class MainActivity : AppCompatActivity() {
         return realm.where(Memo::class.java).findAll()
     }
 
-    fun save(tag: String, imageUriString: String?, title: String, content: String) {
+    fun save(imageUriString: String?, title: String, content: String) {
         realm.executeTransaction {
-            val memo: Memo = it.createObject(Memo::class.java, UUID.randomUUID())
+//            val memo: Memo = it.createObject(Memo::class.java, UUID.randomUUID())
+//
+//            if (memo != null) {
+//                equal(memo, tag, imageUriString, title, content)
+//                realm.copyToRealm(memo)
+//            } else {
+//                val newMemo: Memo = it.createObject(Memo::class.java)
+//                equal(newMemo, tag, imageUriString, title, content)
+//                realm.copyToRealm(newMemo)
+//            }
 
-            if (memo != null) {
-                equal(memo, tag, imageUriString, title, content)
-                realm.copyToRealm(memo)
-            } else {
-                val newMemo: Memo = it.createObject(Memo::class.java)
-                equal(newMemo, tag, imageUriString, title, content)
-                realm.copyToRealm(newMemo)
-            }
+            val memo: Memo = it.createObject(Memo::class.java, UUID.randomUUID().toString())
+            equal(memo, imageUriString, title, content)
         }
     }
 
-    fun equal(memo: Memo, id: String, imageUriString: String?, title: String, content: String) {
-        memo.id = id
+    fun equal(memo: Memo, imageUriString: String?, title: String, content: String) {
         memo.imageUriString = imageUriString
         memo.title = title
         memo.content = content
@@ -112,7 +125,7 @@ class MainActivity : AppCompatActivity() {
 
         if (requestCode == readRequestCode && resultCode == Activity.RESULT_OK) {
             data?.data.also { uri ->
-                var tag: String = UUID.randomUUID().toString()
+                //var tag: String = UUID.randomUUID().toString()
                 /*tag = if (memo?.tag != null) {
                     memo.tag!! + 1
                 } else {
@@ -124,7 +137,7 @@ class MainActivity : AppCompatActivity() {
 
                 var content: String = ""
 
-                save(tag, imageUri, title, content)
+                save(imageUri, title, content)
             }
         }
     }
