@@ -9,5 +9,6 @@ open class Memo (
     @PrimaryKey open var id: String = UUID.randomUUID().toString(),
     open var imageUriString: String? = null,
     open var title: String? = null,
-    open var content: String? = null
+    open var content: String? = null,
+    open var createdAt: Date = Date(System.currentTimeMillis())
 ) : RealmObject()

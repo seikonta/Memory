@@ -9,6 +9,8 @@ import androidx.appcompat.app.AlertDialog
 import io.realm.Realm
 import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.activity_preview.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class PreviewActivity : AppCompatActivity() {
     val realm: Realm = Realm.getDefaultInstance()
@@ -19,6 +21,7 @@ class PreviewActivity : AppCompatActivity() {
         val main = Intent(this, MainActivity::class.java)
 
         var tagString = intent.getStringExtra("tag")
+
 //        var imageId = intent.getStringExtra("image")
 //        var titleText = intent.getStringExtra("title")
 //        var mainText = intent.getStringExtra("main")
@@ -27,6 +30,7 @@ class PreviewActivity : AppCompatActivity() {
         previewImage.setImageURI(Uri.parse(contents.imageUriString))
         titleEditText.setText(contents.title)
         mainEditText.setText(contents.content)
+        dateText.text = SimpleDateFormat("yyyy/MM/dd", Locale.JAPAN).format(contents.createdAt)
 
         backButton.setOnClickListener {
             //main.putExtra("title", titleText)

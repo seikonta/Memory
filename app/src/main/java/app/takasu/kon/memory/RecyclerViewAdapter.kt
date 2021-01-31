@@ -53,11 +53,17 @@ class RecyclerViewAdapter(
         holder.container.setOnClickListener {
             listener.onItemClick(memo)
         }
+
+        holder.container.setOnLongClickListener {
+            listener.onItemLongClick(memo)
+            true
+        }
         holder.drawImage.setImageURI(Uri.parse(memo.imageUriString))
     }
 
     interface OnItemClickListener {
         fun onItemClick(item: Memo)
+        fun onItemLongClick(item: Memo)
     }
 //
 //    fun setOnItemClickListener(listener: OnItemClickListener) {
