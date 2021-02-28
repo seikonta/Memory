@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity() {
 
     private val readRequestCode: Int = 42
 
-    private var title: String = ""
     val realm: Realm by lazy {
         Realm.getDefaultInstance()
     }
@@ -47,18 +46,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-//        if (memo != null) {
-//            // RecyclerViewの画像をmemo.imageUriStringにする
-//        }
-
-        //var titleText = intent.getStringExtra("title")
-        //var mainText = intent.getStringExtra("main")
-
-
         val layoutManager = LinearLayoutManager(this)
-
-        //val recyclerAdapter = Intent(this, RecyclerViewAdapter::class.java).apply {}
 
         imageRecycler.layoutManager = layoutManager
         imageRecycler.adapter = adapter
@@ -70,30 +58,7 @@ class MainActivity : AppCompatActivity() {
             galleryIntent.addCategory(Intent.CATEGORY_OPENABLE)
             galleryIntent.type = "image/*"
             startActivityForResult(galleryIntent, readRequestCode)
-            //startActivity(recyclerAdapter)
         }
-
-
-//        val adapter = RecyclerViewAdapter(this, memo, object : RecyclerViewAdapter.OnItemClickListener {
-//            override fun onItemClick(item: Memo) {
-//                println("clicked galleryButton")
-//                val galleryIntent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-//                galleryIntent.addCategory(Intent.CATEGORY_OPENABLE)
-//                galleryIntent.type = "image/*"
-//                startActivityForResult(galleryIntent, readRequestCode)
-//                //startActivity(recyclerAdapter)
-//            }
-//        }, true)
-
-        /*darkThemeSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            }
-            else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
-        }*/
-
     }
 
     override fun onDestroy() {
@@ -108,17 +73,6 @@ class MainActivity : AppCompatActivity() {
 
     fun save(imageUriString: String?, title: String, content: String, date: Date) {
         realm.executeTransaction {
-//            val memo: Memo = it.createObject(Memo::class.java, UUID.randomUUID())
-//
-//            if (memo != null) {
-//                equal(memo, tag, imageUriString, title, content)
-//                realm.copyToRealm(memo)
-//            } else {
-//                val newMemo: Memo = it.createObject(Memo::class.java)
-//                equal(newMemo, tag, imageUriString, title, content)
-//                realm.copyToRealm(newMemo)
-//            }
-
             val memo: Memo = it.createObject(Memo::class.java, UUID.randomUUID().toString())
             equal(memo, imageUriString, title, content, date)
         }
@@ -136,19 +90,12 @@ class MainActivity : AppCompatActivity() {
 
         if (requestCode == readRequestCode && resultCode == Activity.RESULT_OK) {
             data?.data.also { uri ->
-                //var tag: String = UUID.randomUUID().toString()
-                /*tag = if (memo?.tag != null) {
-                    memo.tag!! + 1
-                } else {
-                    0
-                }*/
                 var imageUri: String = uri.toString()
 
                 var title: String = ""
 
                 var content: String = ""
 
-                //val memo : Memo = memoList?.get(position) ?: return
                 var date: Date = Date(System.currentTimeMillis())
 
                 save(imageUri, title, content, date)
@@ -158,7 +105,6 @@ class MainActivity : AppCompatActivity() {
 
     fun delete(memo: Memo) {
         realm.executeTransaction {
-            //val memo = realm.where(Memo::class.java).equalTo("id", id).findFirst()?: return@executeTransaction
             memo.deleteFromRealm()
         }
     }
